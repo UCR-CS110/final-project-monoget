@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="/css/room.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<nav class="navbar navbar-expand-lg bg-dark text-white">
+    <h1><a class="link-light" href="/">Home</a></h1>
+</nav>
+<h1 class="title"> {{roomName}} </h1>
+{{!-- <p>This is a demo of chatroom page</p>
+<p>
+    The room you are visiting is {{ roomName }}.
+</p>
+<p>To generate a new room, here is the room id: {{ newRoomId }}</p> --}}
+
+<div>
+    <script type="text/javascript">
+        let userName = null;
+        window.addEventListener('load', function () {
+            while (userName === null || userName === "") {
+                userName = prompt('Please enter a username.');
+            }
+        document.getElementById('post').addEventListener('click', () => {submit()});
+        });
+        
+        const submit = () => {
+            if(document.getElementById('content').value.trim() === "") {
+                return;
+            }
+            const data = {
+                roomName: document.getElementById('roomName').value,
+                userName: userName,
+                content: document.getElementById('content').value
+            }
+            const response = fetch("http://localhost:8080/message", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            }).then(document.getElementById('content').value = "");
+        };
+
+        const load = window.setInterval(async () => {
+            fetch("http://localhost:8080/getMessages").
+            then(res => res.json()).then(data=> {
+                var roomName = document.getElementById('roomName');
+                var container = document.getElementById('messageContainer');
+                container.innerHTML = "";
+                var messages = [];
+                //var containerChildren = container.children;
+                
+                //for (var i = 0; i < containerChildren.length; i++) {
+                
+                //}
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].room === roomName.value) {
+                        messages.push(data[i]);
+                    }
+                    //console.log(messages);
+                }
+                for (var j = 0; j < messages.length; j++) {
+                    var header = document.createElement('div');
+                    header.id = "headerMessage";
+                    var firstDiv = document.createElement('div');
+                    firstDiv.id = messages[j]._id;
+                    var secondDiv = document.createElement('div');
+                    secondDiv.id = "username";
+                    secondDiv.innerHTML = messages[j].username;
+                    var thirdDiv = document.createElement('div'); 
+                    thirdDiv.id = "date";
+                    var d = new Date(messages[j].dateEntry);
+                    thirdDiv.innerHTML = d.toLocaleDateString() + "<br/>" + d.toLocaleTimeString();
+
+                    header.appendChild(secondDiv);
+                    header.appendChild(thirdDiv);
+
+                    var fourthDiv = document.createElement('div');
+                    fourthDiv.id = "message";
+                    fourthDiv.innerHTML = messages[j].content;
+                    var messageDiv = document.createElement('div');
+                    messageDiv.id = "individualMessage";
+                    messageDiv.appendChild(firstDiv);
+                    messageDiv.appendChild(header);
+                    messageDiv.appendChild(fourthDiv);
+                    container.appendChild(messageDiv);
+                }
+            });
+        }, 3000);
+    </script>
+</div>
+
+{{#if isAvailable}}
+<div id="chatBox">
+    <div id="messageContainer">
+        {{!-- {{#each messages}}
+                <br>
+                <div id="{{this._id}}"></div>
+                <div id="nickname">{{this.username}}</div>
+                <div id="date">{{this.dateEntry}}</div>
+                <div id="message">{{this.content}}</div>
+                <br>
+        {{/each}} --}}
+    </div>
+</div>
+{{/if}}
+
+<div class = "chatInput"> 
+    <form class="inputForm" onsubmit="return false">
+            <input id='roomName' type="hidden" name="roomName" value="{{roomName}}"/>
+            {{!-- <input id="userNameInput" type="text" name="userName" placeholder="Enter username"> --}}
+            <textarea id="content" type="text" name="content" placeholder="Enter your message" required></textarea>
+            
+            <input class="btn btn-dark" id="post" type="submit" value="Post"> 
+    </form>
+</div>

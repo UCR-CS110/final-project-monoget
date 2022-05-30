@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="/css/home.css" />
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+/>
+
+<nav class="navbar navbar-expand-lg bg-dark link-light">
+
+  <h1><a class="link-light" href="/">Home</a></h1>
+</nav>
+
+<div class="homeContent">
+<div class ="homeMessage">
+  <p>This is the {{title}} page. Below are the rooms that are currently available. If none of them interest
+    you, make your own!</p>
+</div>
+  {{#if isAvailable}}
+    <ul id="list-template">
+      {{#each rooms}}
+        <li> <a href={{this.name}}> {{this.name}} </a></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+  <form class="form form-group formCss" onsubmit="return false">
+    <div class="input-group mb-3">
+      <input class="form-control" id="roomName" type="text" name="roomName" placeholder="Enter a room name" />
+      <div class="input-group-append">
+        <input id="create" class="btn btn-dark" type="submit" value="Create Room"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+<script>
+  window.addEventListener('load', function () { 
+  setInterval(async function(){
+    fetch('http://localhost:8080/getRoom') 
+    .then(response => response.json())
+    .then(data => { 
+      var roomsJson = data;
+      var html = "";
+      var ul_element = document.getElementById('list-template');
+      document.getElementById('list-template').innerHTML=" " 
+      for(var j = 0; j < roomsJson.length; ++j) { 
+        var li = document.createElement('li'); 
+        var a = document.createElement('a'); 
+        a.setAttribute('href', roomsJson[j].name);
+        li.appendChild(a); 
+        document.getElementById('list-template').appendChild(li);
+        a.innerHTML = a.innerHTML + roomsJson[j].name;
+      } 
+    }).catch(err => {
+      console.log("ERROR" + err) }); 
+    }, 3000);
+    document.getElementById('create').addEventListener('click', () => {create()});
+  }
+  );
+
+  const create = async () => {
+    console.log("create");
+    var match = false;
+    const name = document.getElementById('roomName').value;
+    const check = await fetch('http://localhost:8080/getRoom').then(response => response.json())
+    .then(data => {
+      for (let i = 0; i < data.length; i++) {
+        if (name.trim() === data[i].name) {
+          match = true;
+        }
+      }
+    });
+    if (match) {
+      document.getElementById('roomName').value = ""
+      document.getElementById('roomName').placeholder = "Please enter a unique name for room."
+      return;
+    }
+
+    const data = {
+      roomName: name
+    };
+    const response = fetch("http://localhost:8080/create", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            }).then(document.getElementById('roomName').value = "");
+  }
+</script>
