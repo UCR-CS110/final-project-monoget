@@ -13,6 +13,7 @@ const roomMessages = require("./models/roomMessages");
 const homeHandler = require("./controllers/home.js");
 const roomHandler = require("./controllers/room.js");
 const res = require("express/lib/response");
+const { process_params } = require("express/lib/router");
 
 const app = express();
 const port = 8080;
@@ -67,7 +68,9 @@ app.post("/message", (req, res) => {
     room: req.body.roomName,
     username: req.body.userName,
     dateEntry: Date.now(),
-    content: req.body.content
+    content: req.body.content,
+    votes: 0,
+    messageID: roomIdGenerator.roomIdGenerator()
   });
   newMessage.save().then(console.log('Message added to db'))
   .catch(err => console.log("Error: ", err));
@@ -90,6 +93,17 @@ app.get("/getMessages", (req, res) => {
     res.json(items);
   });
 });
+
+app.post("/vote", async (req, res) => {
+  let value = req.body.vote;
+  console.log(req.body.messageID);
+  let temp = await roomMessages.updateOne(
+    { "messageID": req.body.messageID },
+    { $inc: {votes: value} }
+ );
+ console.log(temp);
+ res.send("resolved vote");
+})
 
 // Create controller handlers to handle requests at each endpoint
 app.get("/", homeHandler.getHome);

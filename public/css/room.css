@@ -4,6 +4,11 @@
     flex-direction: row;
 }
 
+#content {
+    resize: none;
+    width: 100%;
+}
+
 #messageContainer {
     display: flex;
     justify-content: space-evenly;
@@ -30,7 +35,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 50%;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -40,6 +45,7 @@
     border-radius: 4px;
     padding-bottom: 10px;
     text-align: justify;
+    width: 100%;
 }
 
 .link-light {
@@ -55,4 +61,26 @@
 
 #message {
     overflow-wrap: break-word;
+}
+
+#filterInput {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    margin: 0 auto;
+}
+
+#voteCount {
+    display: flex;
+    flex-direction: column;
+}
+
+.voteAndMessage {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#vote {
+    text-align: center;
 }
