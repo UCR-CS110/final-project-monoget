@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/css/registration.css">
+<link rel="stylesheet" href="/css/login.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 {{!-- important to reference jquery before bootstrap --}}
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -6,11 +6,11 @@
 
 
 <nav class="navbar navbar-expand-lg bg-dark text-white">
-    <h1><a class="link-light" href="/login">Login</a></h1>
+    <h1><a class="link-light" href="/">Register</a></h1>
 </nav>
-<h1>Register</h1>
+<h1>Login</h1>
 <div>
-    <form id="registrationForm">
+    <form id="loginForm">
         <input type="text" id="username" placeholder="username" required/>
         <input type="password" id="password" placeholder="password" required/>
         <input type="submit" value="Submit"/>
@@ -18,14 +18,14 @@
 </div>
 
 <script>
-    const form = document.getElementById('registrationForm');
-    form.addEventListener("submit", registerUser)
+    const form = document.getElementById('loginForm');
+    form.addEventListener("submit", loginUser)
 
-    async function registerUser(event) {
+    async function loginUser(event) {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
-        const result = await fetch("/api/register", {
+        const result = await fetch("/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -37,6 +37,8 @@
 
         if (result.status === "ok") {
             alert('success');
+            console.log("Got the token: ", result.data);
+            localStorage.setItem("token", result.data); //helps authenticate by logging in only once
         } else {
             alert(result.error);
         }

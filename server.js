@@ -1,8 +1,5 @@
 // import dependencies for express
-const {JSDOM} = require("jsdom");
-const {window} = new JSDOM("");
-const $ = require ("jquery")(window);
-
+const bodyParser = require('body-parser');
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const hbs = require("express-handlebars");
@@ -12,11 +9,18 @@ const mongoose = require("mongoose"); //used for mongoDb
 const config = require("config"); //used to access the config file
 const Room = require("./models/rooms");
 const roomMessages = require("./models/roomMessages");
+const User = require("./models/user");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = config.get("JWT_SECRET");
 
 // import handlers to handle requests to view the homepage
 const homeHandler = require("./controllers/home.js");
 const roomHandler = require("./controllers/room.js");
 const registrationHandler = require("./controllers/registration.js");
+const loginHandler = require("./controllers/login.js");
+const profileHandler = require("./controllers/profile.js");
+
 
 const res = require("express/lib/response");
 const { process_params } = require("express/lib/router");
@@ -130,12 +134,93 @@ app.post("/vote", async (req, res) => {
  res.send("resolved vote");
 })
 
-app.post("/api/register", async (req,res) => {
-
+app.post("/api/login", async (req, res) => {
+  const {username, password} = req.body;
+  
+  const user = await User.findOne({username}).lean();
+  if (!user) {
+    return res.json({status: "error", error: "Invalid username/password."});
+  }
+  
+  if (await bcrypt.compare(password, user.password)) {
+    const token = jwt.sign({
+      id: user._id,
+      username: user.username
+    }, JWT_SECRET);
+    console.log("success!");
+    res.json({status:"success", data:token});
+  }
+  res.json({status:"error", error:"Invalid username/password."})
+  console.log("failed...");
 });
+
+app.post("/api/register", async (req,res) => {
+  //console.log(req.body);
+
+  const {username, password: plainTextPassword} = req.body;
+  const user = await User.findOne({username}).lean();
+  if (user) {
+    return res.json({status: "error", error: "Username already exists! Please choose another one."});
+  }
+
+  if (!username || typeof username !== 'string') {
+    return res.json({status: "error", error: "Invalid username."});
+  }
+
+  if (!plainTextPassword || typeof plainTextPassword !=="string") {
+    return res.json({status: "error", error: "Invalid password."});
+  }
+
+  if (plainTextPassword.length < 4) {
+    return res.json({status: "error", error: "Password is too short!"});
+  }
+
+  const password = await bcrypt.hash(plainTextPassword, 10);
+  try {
+    await User.create({
+      username,
+      password
+    });
+  } catch(error) {
+    console.log(error);
+    return res.json({status: "error"});
+  }
+});
+
+app.post("/api/change-password", async (req, res) => {
+  const {token, newPassword: plainTextPassword} = req.body;
+
+  if (!plainTextPassword || typeof plainTextPassword !=="string") {
+    return res.json({status: "error", error: "Invalid password."});
+  }
+
+  if (plainTextPassword.length < 4) {
+    return res.json({status: "error", error: "Password is too short!"});
+  }
+
+  try {//Verify JWT received
+    const user = jwt.verify(token, JWT_SECRET);
+    const _id = user.id;
+    const password = await bcrypt.hash(plainTextPassword, 10);
+    await User.updateOne(
+      {_id},
+      {
+        $set:{password: password}
+      }
+    );
+    res.json({status:"ok"});
+    console.log("password update successful");
+  } catch (error) {
+    console.log(error);
+    res.json({status: "error", error: ""});
+  }
+
+})
 // Create controller handlers to handle requests at each endpoint
 app.get("/", registrationHandler.getRegistration);
+app.get("/login", loginHandler.getLogin);
 app.get("/home", homeHandler.getHome);
+app.get("/profile", profileHandler.getProfile);
 app.get("/:roomName", roomHandler.getRoom);
 app.get('/:roomName/messages', roomHandler.getRoom);            
 
