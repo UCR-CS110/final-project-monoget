@@ -10,7 +10,7 @@
 </nav>
 <h1>Login</h1>
 <div>
-    <form id="loginForm">
+    <form id="loginForm" onsubmit="return false">
         <input type="text" id="username" placeholder="username" required/>
         <input type="password" id="password" placeholder="password" required/>
         <input type="submit" value="Submit"/>
@@ -33,15 +33,16 @@
             body: JSON.stringify({
                 username, password
             })
-        }).then((res)=> res.json());
+        });
 
-        if (result.status === "ok") {
+        console.log(result.status);
+        if (result.status == "200") {
             alert('success');
             console.log("Got the token: ", result.data);
             localStorage.setItem("token", result.data); //helps authenticate by logging in only once
         } else {
+            console.log("failed");
             alert(result.error);
         }
-        
     }
 </script>
