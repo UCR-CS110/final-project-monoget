@@ -130,6 +130,9 @@ app.post("/vote", async (req, res) => {
  res.send("resolved vote");
 })
 
+app.post("/api/register", async (req,res) => {
+
+});
 // Create controller handlers to handle requests at each endpoint
 app.get("/", registrationHandler.getRegistration);
 app.get("/home", homeHandler.getHome);

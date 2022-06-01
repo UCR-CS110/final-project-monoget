@@ -4,6 +4,39 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+
+<h1>Registration</h1>
 <div>
-    Hello World! This is the Registration Page.
+    <form id="registrationForm">
+        <input type="text" id="username" placeholder="username"/>
+        <input type="password" id="password" placeholder="password"/>
+        <input type="submit" value="Submit"/>
+    </form>
 </div>
+
+<script>
+    const form = document.getElementById('registrationForm');
+    form.addEventListener("submit", registerUser)
+
+    async function registerUser(event) {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const result = await fetch("/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username, password
+            })
+        }).then((res)=> res.json());
+
+        if (result.status === "ok") {
+            alert('success');
+        else {
+            alert(result.error)
+        }
+        }
+    }
+</script>
