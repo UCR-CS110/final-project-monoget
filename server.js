@@ -16,6 +16,8 @@ const roomMessages = require("./models/roomMessages");
 // import handlers to handle requests to view the homepage
 const homeHandler = require("./controllers/home.js");
 const roomHandler = require("./controllers/room.js");
+const registrationHandler = require("./controllers/registration.js");
+
 const res = require("express/lib/response");
 const { process_params } = require("express/lib/router");
 
@@ -129,7 +131,8 @@ app.post("/vote", async (req, res) => {
 })
 
 // Create controller handlers to handle requests at each endpoint
-app.get("/", homeHandler.getHome);
+app.get("/", registrationHandler.getRegistration);
+app.get("/home", homeHandler.getHome);
 app.get("/:roomName", roomHandler.getRoom);
 app.get('/:roomName/messages', roomHandler.getRoom);            
 
