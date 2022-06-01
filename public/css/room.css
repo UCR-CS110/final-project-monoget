@@ -5,6 +5,7 @@
 }
 
 #content {
+    height: 100%;
     resize: none;
     width: 100%;
 }
@@ -13,12 +14,13 @@
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
-    width: 35%;
+    width: 65%;
     border: solid grey 1px;
     border-radius:5px;
     padding: 20px;
-    margin-left: 32.5%;
+    margin: 0 auto;
     padding-bottom: 200px;
+    min-height: min-content;
 }
 
 #username {
@@ -41,8 +43,6 @@
 
 #individualMessage {
     margin: 5px;
-    border-bottom: 1px solid grey;
-    border-radius: 4px;
     padding-bottom: 10px;
     text-align: justify;
     width: 100%;
@@ -54,13 +54,14 @@
 }
 
 .chatInput {
+    margin: 0 auto;
     margin-top: -110px;
-    width: 30%;
-    margin-left: 35%;
+    width: 60%;
 }
 
 #message {
     overflow-wrap: break-word;
+    min-width: 100%;
 }
 
 #filterInput {
@@ -68,6 +69,7 @@
     justify-content: center;
     width: 50%;
     margin: 0 auto;
+    height: 100%;
 }
 
 #voteCount {
@@ -78,9 +80,21 @@
 .voteAndMessage {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 75%;
+    margin: 0 auto;
+    border-bottom: 1px solid grey;
+    border-radius: 4px;
 }
 
 #vote {
     text-align: center;
+}
+
+#date {
+    text-align: right;
+}
+
+#textMsg {
+    width: 100%;
+    margin: 0 auto;
 }

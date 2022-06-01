@@ -1,5 +1,9 @@
 <link rel="stylesheet" href="/css/room.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+{{!-- important to reference jquery before bootstrap --}}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 
 <nav class="navbar navbar-expand-lg bg-dark text-white">
     <h1><a class="link-light" href="/">Home</a></h1>
@@ -12,7 +16,29 @@
     The room you are visiting is {{ roomName }}.
 </p>
 <p>To generate a new room, here is the room id: {{ newRoomId }}</p> --}}
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1>Edit Comment</h1>
+                        </div>
+                        <div class="modal-body">
+                            <textarea id="textMsg" value=""></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <input name="" id="updateInput" type="button" class="btn btn-primary" data-dismiss="modal" value="Save" onclick="updateMsg(this.name)">
+                            <input name="" id="deleteInput" type="button" class="btn btn-danger" data-dismiss="modal" value="Delete" onclick="deleteMsg(this.name)">
+                            <input type="button" class="btn btn-dark" data-dismiss="modal" value="Close">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     let filterVal = "";
@@ -71,7 +97,49 @@
             body: JSON.stringify(data)
         });
     };
+
+    const editModal = (messages, messageId) => {
+        //use name key in element to stash messageID since the default id key is unique to each element"
+        let deleteInput = document.getElementById('deleteInput');
+        deleteInput.name = messageId;
+        let updateInput = document.getElementById('updateInput');
+        updateInput.name = messageId;
+        
+        let modalBody = document.getElementById('textMsg');
+        for (let message of messages) {
+            if (message.messageID === messageId) {
+                modalBody.value = message.content;
+                return;
+            }
+        }
+
+    }
+
+    const deleteMsg = async (messageId) => {
+        let data = {
+            messageID: messageId
+        };
+        await fetch(`http://localhost:8080/deleteMsg`, {
+            method: "DELETE",
+            headers: {"Content-Type" : "application/json"},
+            body: JSON.stringify(data)
+        });
+    }
     
+    const updateMsg = async (messageId) => {
+        let newMsg = document.getElementById('textMsg').value;
+        let data = {
+            messageID: messageId,
+            newMessage: newMsg
+        };
+        await fetch(`http://localhost:8080/updateMsg`, {
+            method: "POST",
+            headers: {"Content-Type" : "application/json"},
+            body: JSON.stringify(data)
+        });
+        //console.log(newMsg, messageId);
+        
+    }
     const load = window.setInterval(async () => {
         fetch("http://localhost:8080/getMessages").
         then(res => res.json()).then(data=> {
@@ -94,6 +162,7 @@
             }
 
             messages = filter(messages, filterVal);
+            //for future reference use let and const rather than var 
             for (var j = 0; j < messages.length; j++) {
                 var header = document.createElement('div');
                 header.id = "headerMessage";
@@ -106,7 +175,18 @@
                 thirdDiv.id = "date";
                 var d = new Date(messages[j].dateEntry);
                 thirdDiv.innerHTML = d.toLocaleDateString() + "<br/>" + d.toLocaleTimeString();
-
+                const editB = document.createElement('button');
+                editB.setAttribute("type", "button");
+                editB.setAttribute("class", "btn btn-primary");
+                editB.setAttribute("data-toggle", "modal");
+                editB.setAttribute("data-target", "#myModal");
+                editB.innerHTML = "Edit";
+                let messageID = messages[j].messageID;
+                editB.addEventListener("click", () => {editModal(messages, messageID)});
+                //console.log(messageID);
+                thirdDiv.innerHTML += "<br/>";
+                thirdDiv.appendChild(editB);
+                
                 header.appendChild(secondDiv);
                 header.appendChild(thirdDiv);
 
@@ -158,11 +238,10 @@
     </div>
 </div>
 {{/if}}
-
 <div class = "chatInput"> 
     <form class="inputForm" onsubmit="return false">
             <input id='roomName' type="hidden" name="roomName" value="{{roomName}}"/>
-            {{!-- <input id="userNameInput" type="text" name="userName" placeholder="Enter username"> --}}
+            
             <textarea id="content" type="text" name="content" placeholder="Enter your message" required></textarea>
             
             <input class="btn btn-dark" id="post" type="submit" value="Post"> 

@@ -1,4 +1,8 @@
 // import dependencies for express
+const {JSDOM} = require("jsdom");
+const {window} = new JSDOM("");
+const $ = require ("jquery")(window);
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const hbs = require("express-handlebars");
@@ -92,6 +96,25 @@ app.get("/getMessages", (req, res) => {
   roomMessages.find().lean().then(items => {
     res.json(items);
   });
+});
+
+app.delete("/deleteMsg", async (req, res) => {
+  let messageId = req.body.messageID;
+  let temp = await roomMessages.deleteOne(
+    {"messageID": messageId}
+  );
+  console.log(temp);
+  res.send("resolved delete");
+});
+
+app.post("/updateMsg", async (req, res) => {
+  let messageId = req.body.messageID;
+  let message = req.body.newMessage.trim();
+  let temp = await roomMessages.updateOne(
+    {"messageID": messageId},
+    {$set: {content: message}}
+  );
+  res.send("resolved update msg");
 });
 
 app.post("/vote", async (req, res) => {
