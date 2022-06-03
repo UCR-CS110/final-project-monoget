@@ -33,9 +33,9 @@
             body: JSON.stringify({
                 username, password
             })
-        });
-        console.log(result.status);
-        if (result.status == "200") {
+        }).then((res) => res.json());
+
+        if (result.status == "success") {
             alert('success'); 
             //do something here.
         } else {

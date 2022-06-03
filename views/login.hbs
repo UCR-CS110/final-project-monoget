@@ -24,7 +24,7 @@
     async function loginUser(event) {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
-
+        console.log(username, password);
         const result = await fetch("/api/login", {
             method: "POST",
             headers: {
@@ -35,14 +35,15 @@
             })
         });
 
-        console.log(result.status);
-        if (result.status == "200") {
+        let final = await result.json();
+        if (final.status == 'success') {
             alert('success');
-            console.log("Got the token: ", result.data);
-            localStorage.setItem("token", result.data); //helps authenticate by logging in only once
+            console.log("Got the token: ", final.data);
+            localStorage.setItem("token", final.data); //helps authenticate by logging in only once 
+            window.location.replace("/home")
         } else {
             console.log("failed");
-            alert(result.error);
+            alert(final.error);
         }
     }
 </script>

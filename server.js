@@ -136,11 +136,9 @@ app.post("/vote", async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   const {username, password} = req.body;
-  
-  const user = await User.findOne({username : username});
+  const user = await User.findOne({username : username.trim()});
   
   if (!user) {
-    console.log("test");
     return res.json({status: "error", error: "Invalid username/password."});
   }
   
@@ -148,19 +146,22 @@ app.post("/api/login", async (req, res) => {
     const token = jwt.sign({
       id: user._id,
       username: user.username
-    }, JWT_SECRET);
-    console.log("success!");
-    return res.json({status:"success", data:token});
+    }, 
+    JWT_SECRET);
+    //console.log(token);
+    const result = {status: "success", data: token};
+    return res.json(result);
   }
+
   console.log("failed...");
-  return res.json({status:"error", error:"Invalid username/password."})
+  return res.json({status: "error", error: "Invalid username/password."});
 });
 
 app.post("/api/register", async (req,res) => {
   //console.log(req.body);
 
   const {username, password: plainTextPassword} = req.body;
-  const user = await User.findOne({username : username}).lean();
+  const user = await User.findOne({username : username.trim()}).lean();
   if (user) {
     return res.json({status: "error", error: "Username already exists! Please choose another one."});
   }
@@ -187,7 +188,7 @@ app.post("/api/register", async (req,res) => {
     console.log(error);
     return res.json({status: "error"});
   }
-  res.send("Success");
+  return res.json({status: "success"});
 });
 
 app.post("/api/change-password", async (req, res) => {
