@@ -4,24 +4,64 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-<nav class="navbar navbar-expand-lg bg-dark text-white">
-    <h1><a class="link-light" href="/home">Home</a></h1>
+<nav class="navbar navbar-expand-lg bg-dark link-light">
+  <ul class="navbar-nav me-auto order-0">
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/profile">Profile</a>
+    </li>
+  </ul>
+  <div class="navbar-nav ml-auto">
+    <a id="sign-out" class="nav-link link-light" href="#">Sign Out</a>
+  </div>
+  {{!-- <h1><a class="nav-item nav-link link-light" href="/home">Home</a></h1> --}}
+  {{!-- <h1><a class="nav-item nav-link link-light" href="/profile">Profile</a></h1> --}}
+  {{!-- <h5><a class="nav-link link-light ml-auto" href="/">Sign Out</a></h5> --}}
 </nav>
-
-<h1>Profile Page</h1>
+<h1 class="row justify-content-center">Profile Page</h1>
 <div>
-    <form id="registrationForm" onsubmit="return false">
-        <input type="password" id="password" placeholder="password" required/>
-        <input type="submit" value="Submit"/>
+    <form class="row" id="registrationForm" onsubmit="return false">
+        <div class="col-lg-6 mx-auto">
+            <div id="username"></div>
+            <div id="email"></div>
+            <br>
+            <div class="form-group">
+                <label for="password-update">Change Password</label>
+                <input class="form-control" type="password" id="password" placeholder="password" required/>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Submit"/>
+        </div>
     </form>
 </div>
 
 <script>
+    window.addEventListener('load', () => {
+        initialize();
+    })
     const form = document.getElementById('registrationForm');
     form.addEventListener("submit", changePassword)
+    document.getElementById('sign-out').addEventListener('click', () => {signOut()});
+    const signOut = async () => {
+        await localStorage.clear();
+        window.location.replace("/login");
+    }
 
+    const initialize = async () => {
+        let data = {token: localStorage.getItem("token")};
+        userData = await fetch("/api/userData", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            }).then((res)=>res.json());
+        document.getElementById("username").innerHTML = "Username: " + userData.username;
+        document.getElementById("email").innerHTML = "Email: " + userData.email;
+
+    }
+    
     async function changePassword(event) {
-        const password = document.getElementById("password").value;
+        const newPassword = document.getElementById("password").value;
 
         const result = await fetch("/api/change-password", {
             method: "POST",
@@ -29,13 +69,13 @@
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                password,
+                newPassword,
                 token: localStorage.getItem("token")
             })
         }).then((res)=> res.json());
 
         if (result.status === "ok") {
-            alert('success');
+            alert('Password has been successfully updated!');
         } else {
             alert(result.error);
         }

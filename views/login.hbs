@@ -6,16 +6,34 @@
 
 
 <nav class="navbar navbar-expand-lg bg-dark text-white">
-    <h1><a class="link-light" href="/">Register</a></h1>
+    <ul class="nav-item">
+         <h2><a class="nav-link link-light" href="/">Register</a></h2>
+    </ul>
 </nav>
-<h1>Login</h1>
+
+<h1 class="row justify-content-center">Login</h1>
+<form class="row" id="loginForm" onsubmit="return false">
+    <div class="col-lg-6 mx-auto">
+    <div class="form-group">
+        <label for="username-label">Username</label>
+        <input class="form-control" type="text" id="username" placeholder="Enter a username" required/>
+    </div>
+    <div class="form-group">
+        <label for="password-label">Password</label>
+        <input class="form-control" type="password" id="password" placeholder="Enter a password" required/>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Submit"/>
+    </div>
+</form>
+
+{{!-- <h1>Login</h1>
 <div>
     <form id="loginForm" onsubmit="return false">
         <input type="text" id="username" placeholder="username" required/>
         <input type="password" id="password" placeholder="password" required/>
         <input type="submit" value="Submit"/>
     </form>
-</div>
+</div> --}}
 
 <script>
     const form = document.getElementById('loginForm');
@@ -24,7 +42,7 @@
     async function loginUser(event) {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
-
+        console.log(username, password);
         const result = await fetch("/api/login", {
             method: "POST",
             headers: {
@@ -35,14 +53,15 @@
             })
         });
 
-        console.log(result.status);
-        if (result.status == "200") {
+        let final = await result.json();
+        if (final.status == 'success') {
             alert('success');
-            console.log("Got the token: ", result.data);
-            localStorage.setItem("token", result.data); //helps authenticate by logging in only once
+            console.log("Got the token: ", final.data);
+            localStorage.setItem("token", final.data); //helps authenticate by logging in only once 
+            window.location.replace("/home")
         } else {
             console.log("failed");
-            alert(result.error);
+            alert(final.error);
         }
     }
 </script>
