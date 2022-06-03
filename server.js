@@ -160,7 +160,7 @@ app.post("/api/login", async (req, res) => {
 app.post("/api/register", async (req,res) => {
   //console.log(req.body);
 
-  const {username, password: plainTextPassword} = req.body;
+  const {username, password: plainTextPassword, email} = req.body;
   const user = await User.findOne({username : username.trim()}).lean();
   if (user) {
     return res.json({status: "error", error: "Username already exists! Please choose another one."});
@@ -178,11 +178,16 @@ app.post("/api/register", async (req,res) => {
     return res.json({status: "error", error: "Password is too short!"});
   }
 
+  const emailCheck = await User.findOne({email : email.trim()}).lean();
+  if (emailCheck) {
+    return res.json({status: "error", error: "This email is already registered!"});
+  }
   const password = await bcrypt.hash(plainTextPassword, 10);
   try {
     await User.create({
       username,
-      password
+      password,
+      email
     });
   } catch(error) {
     console.log(error);
