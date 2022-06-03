@@ -5,8 +5,20 @@
 />
 
 <nav class="navbar navbar-expand-lg bg-dark link-light">
-
-  <h1><a class="link-light" href="/">Home</a></h1>
+  <ul class="navbar-nav me-auto order-0">
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/profile">Profile</a>
+    </li>
+  </ul>
+  <div class="ml-auto">
+    <a id="sign-out" class="nav-link link-light" href="#">Sign Out</a>
+  </div>
+  {{!-- <h1><a class="nav-item nav-link link-light" href="/home">Home</a></h1> --}}
+  {{!-- <h1><a class="nav-item nav-link link-light" href="/profile">Profile</a></h1> --}}
+  {{!-- <h5><a class="nav-link link-light ml-auto" href="/">Sign Out</a></h5> --}}
 </nav>
 
 <div class="homeContent">
@@ -34,6 +46,7 @@
 <script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
 <script>
   window.addEventListener('load', function () { 
+  document.getElementById('sign-out').addEventListener('click', () => {signOut()});
   setInterval(async function(){
     fetch('http://localhost:8080/getRoom') 
     .then(response => response.json())
@@ -57,6 +70,10 @@
   }
   );
 
+  const signOut = async () => {
+    await localStorage.clear();
+    window.location.replace("/login");
+  }
   const create = async () => {
     console.log("create");
     var match = false;

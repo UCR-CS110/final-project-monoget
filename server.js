@@ -125,12 +125,12 @@ app.post("/updateMsg", async (req, res) => {
 
 app.post("/vote", async (req, res) => {
   let value = req.body.vote;
-  console.log(req.body.messageID);
+  //console.log(req.body.messageID);
   let temp = await roomMessages.updateOne(
     { "messageID": req.body.messageID },
     { $inc: {votes: value} }
  );
- console.log(temp);
+ //console.log(temp);
  res.send("resolved vote");
 })
 
@@ -192,9 +192,9 @@ app.post("/api/register", async (req,res) => {
 });
 
 app.post("/api/change-password", async (req, res) => {
-  const {token, newPassword: plainTextPassword} = req.body;
+  const {newPassword: plainTextPassword, token} = req.body;
 
-  if (!plainTextPassword || typeof plainTextPassword !=="string") {
+  if (!plainTextPassword || typeof plainTextPassword !== "string") {
     return res.json({status: "error", error: "Invalid password."});
   }
 
@@ -205,6 +205,7 @@ app.post("/api/change-password", async (req, res) => {
   try {//Verify JWT received
     const user = jwt.verify(token, JWT_SECRET);
     const _id = user.id;
+  
     const password = await bcrypt.hash(plainTextPassword, 10);
     await User.updateOne(
       {_id},
@@ -216,10 +217,24 @@ app.post("/api/change-password", async (req, res) => {
     console.log("password update successful");
   } catch (error) {
     console.log(error);
-    res.json({status: "error", error: ""});
+    res.json({status: "error", error: "Authentication Failed"});
   }
 
 })
+
+app.post("/api/userData", async (req, res) => {
+  const token = req.body.token;
+  try {
+    const user = jwt.verify(token, JWT_SECRET);
+    const _id = user.id;
+    const userData = await User.findOne({_id : _id});
+    console.log(userData);
+    res.json(userData);
+  } catch (error) {
+    console.log(error);
+    res.json({status: "error", error: "Authentication Failed"});
+  }
+});
 // Create controller handlers to handle requests at each endpoint
 app.get("/", registrationHandler.getRegistration);
 app.get("/login", loginHandler.getLogin);
