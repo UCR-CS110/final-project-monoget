@@ -5,22 +5,25 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
-<nav class="navbar navbar-expand-lg bg-dark link-light">
-  <ul class="navbar-nav me-auto order-0">
+<nav class="navbar navbar-expand-md bg-dark text-white">
+  <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-      <a class="nav-link link-light" href="/home">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link link-light" href="/profile">Profile</a>
+      <a class="nav-link link-light" href="/home">Chatroom</a>
     </li>
   </ul>
-  <div class="navbar-nav ml-auto">
-    <a id="sign-out" class="nav-link link-light" href="#">Sign Out</a>
+  <div class="ml-auto">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+      <a class="nav-link link-light" href="/profile">Profile</a>
+      </li>
+
+      <li class="nav-item">
+        <a id="sign-out" class="nav-link link-light" href="#">Sign Out</a>
+      </li>
+    </ul>
   </div>
-  {{!-- <h1><a class="nav-item nav-link link-light" href="/home">Home</a></h1> --}}
-  {{!-- <h1><a class="nav-item nav-link link-light" href="/profile">Profile</a></h1> --}}
-  {{!-- <h5><a class="nav-link link-light ml-auto" href="/">Sign Out</a></h5> --}}
 </nav>
+
 <h1 class="title"> {{roomName}} </h1>
 <input type="text" id="filterInput" placeholder="Please enter a filter" value="" oninput="updateFilter(this.value)"/>
 <br>

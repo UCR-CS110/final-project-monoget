@@ -16,7 +16,8 @@
 ul {
     list-style: none;
     padding: 0;
-    font-size: 120%;
+    font-size: 100%;
+    counter-reset: counter;
 }
 
 #myForm {
@@ -33,10 +34,28 @@ ul {
     padding: 20px;
 }
 
-li {
-    margin: 15px 0;
-}
-
 .formCss {
     width: 60%;
+}
+
+#list-template li::before {
+    content: counter(counter);
+    background: #292b2c;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 2rem;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+}
+
+#list-template li {
+    counter-increment: counter;
+    margin: 0.25rem;
+}
+
+#list-template{
+    text-align: left;
 }
