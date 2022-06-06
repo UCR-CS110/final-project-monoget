@@ -8,7 +8,7 @@
 - [Dependencies](#dependencies)
 
 ## Overview
-<Include project description?
+The alternate project we choice is an extension of Lab 6. Lab 6 was a basic chatroom webapp that had multiple rooms and users. Our alternate final project consists of building a log in and register system, and a profile system on top of the already existing lab 6. This allows users to log in to their accounts and chat with other registered users on the platform. All of this is done over react, express js, and mongoDB. 
 
 ## Team
 <a href="https://github.com/MachineLearningAmateur" target="_blank"><img src="https://avatars3.githubusercontent.com/u/50182455?s=400&v=4" align="left" height="30px">James Zhang </a>
