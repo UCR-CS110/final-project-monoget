@@ -227,6 +227,20 @@ app.post("/api/change-password", async (req, res) => {
 
 })
 
+app.post("/user", async (req, res) => {
+  const username = req.body.username;
+  let temp = await User.findOne({username: username});
+  if (temp) {
+    console.log(temp);
+    let email = temp.email;
+    let user = temp.username;
+    let body = {email: email, username : user};
+    res.json(body);
+  } else {
+    res.send("Error");
+  }
+});
+
 app.post("/api/userData", async (req, res) => {
   const token = req.body.token;
   try {
@@ -245,6 +259,7 @@ app.get("/", registrationHandler.getRegistration);
 app.get("/login", loginHandler.getLogin);
 app.get("/home", homeHandler.getHome);
 app.get("/profile", profileHandler.getProfile);
+app.get("/profile/:user", profileHandler.getProfile);
 app.get("/:roomName", roomHandler.getRoom);
 app.get('/:roomName/messages', roomHandler.getRoom);            
 

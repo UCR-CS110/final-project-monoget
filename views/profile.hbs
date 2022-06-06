@@ -13,7 +13,7 @@
   <div class="ml-auto">
     <ul class="navbar-nav">
       <li class="nav-item">
-      <a class="nav-link link-light" href="/profile">Profile</a>
+      <a class="nav-link link-light" href="/profile">My Profile</a>
       </li>
 
       <li class="nav-item">
@@ -24,6 +24,8 @@
 </nav>
 
 <h1 class="row justify-content-center">Profile Page</h1>
+
+{{#unless view}}
 <div>
     <form class="row" id="registrationForm" onsubmit="return false">
         <div class="col-lg-6 mx-auto">
@@ -38,6 +40,17 @@
         </div>
     </form>
 </div>
+{{else}}
+<div>
+    <form class="row" id="registrationForm" onsubmit="return false">
+        <div class="col-lg-6 mx-auto">
+            <div id="username"></div>
+            <div id="email"></div>
+            <br>
+        </div>
+    </form>
+</div>
+{{/unless}}
 
 <script>
     window.addEventListener('load', () => {
@@ -52,14 +65,28 @@
     }
 
     const initialize = async () => {
-        let data = {token: localStorage.getItem("token")};
-        userData = await fetch("/api/userData", {
+        //console.log({{view}});
+        if ({{view}}) {
+            let data = {username : "{{username}}"}
+            let userData = await fetch ("/user", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data)
             }).then((res)=>res.json());
-        document.getElementById("username").innerHTML = "Username: " + userData.username;
-        document.getElementById("email").innerHTML = "Email: " + userData.email;
+       
+            document.getElementById("username").innerHTML = "Username: " + userData.username;
+            document.getElementById("email").innerHTML = "Email: " + userData.email;
+
+        } else {
+            let data = {token: localStorage.getItem("token")};
+            let userData = await fetch("/api/userData", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(data)
+                }).then((res)=>res.json());
+            document.getElementById("username").innerHTML = "Username: " + userData.username;
+            document.getElementById("email").innerHTML = "Email: " + userData.email;
+        }
 
     }
     

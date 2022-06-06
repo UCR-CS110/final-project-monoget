@@ -5,7 +5,13 @@
 
 function getProfile(request, response){
     // do any work you need to do, then
-    response.render('profile', {title: 'Profile Page'});
+    let username = request.params.user;
+    let view = false;
+    
+    if (username) {
+        view = true;
+    }
+    response.render('profile', {title: 'Profile Page', username: username, view: view});
   
   }
   

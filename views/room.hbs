@@ -14,7 +14,7 @@
   <div class="ml-auto">
     <ul class="navbar-nav">
       <li class="nav-item">
-      <a class="nav-link link-light" href="/profile">Profile</a>
+      <a class="nav-link link-light" href="/profile">My Profile</a>
       </li>
 
       <li class="nav-item">
@@ -179,6 +179,14 @@
         await localStorage.clear();
         window.location.replace("/login");
     }
+
+    const loadProfile = async (username) => {
+        let data = {view: true};
+        await fetch(`/profile/${username}`, {
+                method: "GET"
+            });
+    }
+
     const load = window.setInterval(async () => {
         fetch("http://localhost:8080/getMessages").
         then(res => res.json()).then(data=> {
@@ -207,9 +215,13 @@
                 header.id = "headerMessage";
                 var firstDiv = document.createElement('div');
                 firstDiv.id = messages[j]._id;
-                var secondDiv = document.createElement('div');
+                const secondDiv = document.createElement('a');
+                const profUsername = messages[j].username;
                 secondDiv.id = "username";
-                secondDiv.innerHTML = messages[j].username;
+                secondDiv.innerHTML = profUsername;
+                secondDiv.addEventListener("click", () => {loadProfile(profUsername)});
+                secondDiv.setAttribute("href", `/profile/${profUsername}`);
+
                 var thirdDiv = document.createElement('div'); 
                 thirdDiv.id = "date";
                 var d = new Date(messages[j].dateEntry);
