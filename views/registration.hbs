@@ -5,42 +5,39 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
-<nav class="navbar navbar-expand-md bg-dark text-white">
-    <ul class="navbar-nav mr-auto">
-        <h2>Chatroom</h2>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <a class="link-light nav-link" href="/login">Login</a>
-        </li>
-        <li class="nav-item">
-            <a class="link-light nav-link" href="/">Register</a>
-        </li>
+<nav class="navbar navbar-expand-lg bg-dark text-white">
+    <ul class="nav-item">
+         <h2><a class="nav-link link-light" href="/login">Login</a></h2>
     </ul>
 </nav>
-
-<div class="container">
-    <div class="row">
-        <div class="col d-flex justify-content-center align-items-center" style="height: 80vh;">
-            <div style="width: 300px; height: auto;">
-                <h1>Register</h1>
-                <form id="registrationForm" onsubmit="return false">
-                <input type="text" id="username" placeholder="username" required/> </br>
-                <input type="password" id="password" placeholder="password" required/> </br>
-                <input type="submit" value="Submit"/>
-                </form>
-            </div>
-        </div>
+<h1 class="row justify-content-center">Register</h1>
+<form class="row" id="registrationForm" onsubmit="return false">
+    <div class="col-lg-6 mx-auto">
+    <div class="form-group">
+        <label for="email-label">Email</label>
+        <input class="form-control" type="email" id="email" placeholder="Enter an email" required/>
     </div>
-</div>
+    <div class="form-group">
+        <label for="username-label">Username</label>
+        <input class="form-control" type="text" id="username" placeholder="Enter a username" required/>
+    </div>
+    <div class="form-group">
+        <label for="password-label">Password</label>
+        <input class="form-control" type="password" id="password" placeholder="Enter a password" required/>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Submit"/>
+    </div>
+</form>
+
 
 <script>
     const form = document.getElementById('registrationForm');
-    form.addEventListener("submit", registerUser)
+    form.addEventListener("submit", registerUser);
 
     async function registerUser(event) {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
+        const email = document.getElementById("email").value;
         //console.log(username, password);
         const result = await fetch("/api/register", {
             method: "POST",
@@ -48,11 +45,11 @@
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username, password
+                username, password, email
             })
-        });
-        console.log(result.status);
-        if (result.status == "200") {
+        }).then((res) => res.json());
+
+        if (result.status == "success") {
             alert('success'); 
             //do something here.
         } else {
@@ -60,5 +57,6 @@
         }
         document.getElementById("username").value = "";
         document.getElementById("password").value = "";
+        document.getElementById("email").value = "";
     }
 </script>

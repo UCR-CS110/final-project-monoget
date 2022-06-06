@@ -5,8 +5,21 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
-<nav class="navbar navbar-expand-lg bg-dark text-white">
-    <h1><a class="link-light" href="/">Home</a></h1>
+<nav class="navbar navbar-expand-lg bg-dark link-light">
+  <ul class="navbar-nav me-auto order-0">
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/profile">Profile</a>
+    </li>
+  </ul>
+  <div class="navbar-nav ml-auto">
+    <a id="sign-out" class="nav-link link-light" href="#">Sign Out</a>
+  </div>
+  {{!-- <h1><a class="nav-item nav-link link-light" href="/home">Home</a></h1> --}}
+  {{!-- <h1><a class="nav-item nav-link link-light" href="/profile">Profile</a></h1> --}}
+  {{!-- <h5><a class="nav-link link-light ml-auto" href="/">Sign Out</a></h5> --}}
 </nav>
 <h1 class="title"> {{roomName}} </h1>
 <input type="text" id="filterInput" placeholder="Please enter a filter" value="" oninput="updateFilter(this.value)"/>
@@ -47,19 +60,37 @@
         filterVal = value;
     }
 
+    let data = {token: localStorage.getItem("token")};
+
+    let userData = null
+
     let userName = null;
-    
+
     window.addEventListener('load', function () {
-        while (userName === null || userName === "") {
+    /*while (userName === null || userName === "") {
             userName = prompt('Please enter a username.');
-        }
+        }*/
+    initialize();
     document.getElementById('post').addEventListener('click', () => {submit()});
+    document.getElementById('sign-out').addEventListener('click', () => {signOut()});
     });
     
+    const initialize = async () => {
+        console.log(data);
+        console.log(data.token);
+        userData = await fetch("/api/userData", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            }).then((res)=>res.json());
+        userName = userData.username;
+    }
+
     const submit = () => {
         if(document.getElementById('content').value.trim() === "") {
             return;
         }
+        console.log("My username: " + userName);
         const data = {
             roomName: document.getElementById('roomName').value,
             userName: userName,
@@ -140,6 +171,11 @@
         //console.log(newMsg, messageId);
         
     }
+
+    const signOut = async () => {
+        await localStorage.clear();
+        window.location.replace("/login");
+    }
     const load = window.setInterval(async () => {
         fetch("http://localhost:8080/getMessages").
         then(res => res.json()).then(data=> {
@@ -175,17 +211,20 @@
                 thirdDiv.id = "date";
                 var d = new Date(messages[j].dateEntry);
                 thirdDiv.innerHTML = d.toLocaleDateString() + "<br/>" + d.toLocaleTimeString();
-                const editB = document.createElement('button');
-                editB.setAttribute("type", "button");
-                editB.setAttribute("class", "btn btn-primary");
-                editB.setAttribute("data-toggle", "modal");
-                editB.setAttribute("data-target", "#myModal");
-                editB.innerHTML = "Edit";
-                let messageID = messages[j].messageID;
-                editB.addEventListener("click", () => {editModal(messages, messageID)});
-                //console.log(messageID);
-                thirdDiv.innerHTML += "<br/>";
-                thirdDiv.appendChild(editB);
+                if (messages[j].username === userName) {
+                    const editB = document.createElement('button');
+                    editB.setAttribute("type", "button");
+                    editB.setAttribute("class", "btn btn-primary");
+                    editB.setAttribute("data-toggle", "modal");
+                    editB.setAttribute("data-target", "#myModal");
+                    editB.innerHTML = "Edit";
+                    let messageID = messages[j].messageID;
+                    editB.addEventListener("click", () => {editModal(messages, messageID)});
+                    //console.log(messageID);
+                    thirdDiv.innerHTML += "<br/>";
+                    thirdDiv.appendChild(editB);
+                }
+                
                 
                 header.appendChild(secondDiv);
                 header.appendChild(thirdDiv);
