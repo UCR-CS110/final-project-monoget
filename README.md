@@ -31,7 +31,7 @@ In the project directory, you can run:
 open http://localhost:8080
   
 ## Issues We Ran Into
-  - routing profile for specific users\
+  - Routing profile for specific users\
     This was a challenging problem, but we managed to resolve this by adding a boolean called view that keeps track of which fetch we called to route to the profile 
     page via the profile handler in server.js
   - Parsing and passing json objects\
