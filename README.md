@@ -23,7 +23,7 @@ Demo: <Link to youtube video>
 
 ## How To Run
 In the project directory, you can run:
->npm install
+>npm install\
 >nodemon server.js
 
 
