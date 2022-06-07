@@ -38,5 +38,5 @@ open http://localhost:8080
     This took a while for us to understand because we had to manipulate json objects in some of our api calls and had to return it via the response as a json object.
     It took a while for us to understand that we need to call json on the returned response object in order to parse the body of the json. After understanding the 
     problem we were able to successfully pass in 
-  - Editing messages
+  - Editing messages\
     This problem was also challenging but we managed to resolve it by storing the message id in the name tag of the element to be accessed by our script function. 
