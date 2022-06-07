@@ -39,4 +39,7 @@ open http://localhost:8080
     It took a while for us to understand that we need to call json on the returned response object in order to parse the body of the json. After understanding the 
     problem we were able to successfully pass in 
   - Editing messages\
-    This problem was also challenging but we managed to resolve it by storing the message id of the comment in the name tag of the element to be retrieved by our  script function. 
+    This problem was also challenging but we managed to resolve it by storing the message id of the comment in the name tag of the element to be retrieved by our           script function. 
+  - Updating and Extracting Info from MongoDB\ 
+    This took a while to understand as well because we had to look up MongoDB documentation in order to utilize their functions and understand what arguments we need 
+    to pass in. 
