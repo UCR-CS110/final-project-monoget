@@ -19,7 +19,7 @@ The alternate project we choice is an extension of Lab 6. Lab 6 was a basic chat
 <a href="https://github.com/caKuma" target="_blank"><img src="https://avatars3.githubusercontent.com/u/19195878?s=400&v=4" align="left" height="30px">Yishao Wang </a>
 
 ## Usage
-Demo: <a href="https://flipgrid.com/af083092" <b>This Video</b></a>
+Demo: <a href="https://flipgrid.com/af083092"><b>This Video</b></a>
 
 <Screenshot of application>
 
