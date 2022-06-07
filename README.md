@@ -2,9 +2,10 @@
 
 ## Table of Contents
 - [Overview](#overview)
+- [Team](#team)
 - [Usage](#usage)
 - [How To Run](#how-to-run)
-- [Issues We Ran Into](#issues)
+- [Issues We Ran Into](#issues-we-ran-into)
 
 
 ## Overview
