@@ -17,6 +17,10 @@ const UserSchema = new Schema({
     type: String,
     unique: true
   },
+  age: {
+    type: Number,
+    required: true
+  }
 });
 
 module.exports = Item = mongoose.model('UserData', UserSchema);

@@ -160,7 +160,7 @@ app.post("/api/login", async (req, res) => {
 app.post("/api/register", async (req,res) => {
   //console.log(req.body);
 
-  const {username, password: plainTextPassword, email} = req.body;
+  const {username, password: plainTextPassword, email, age} = req.body;
   const user = await User.findOne({username : username.trim()}).lean();
   if (user) {
     return res.json({status: "error", error: "Username already exists! Please choose another one."});
@@ -187,7 +187,8 @@ app.post("/api/register", async (req,res) => {
     await User.create({
       username,
       password,
-      email
+      email,
+      age
     });
   } catch(error) {
     console.log(error);
@@ -234,7 +235,8 @@ app.post("/user", async (req, res) => {
     console.log(temp);
     let email = temp.email;
     let user = temp.username;
-    let body = {email: email, username : user};
+    let age = temp.age;
+    let body = {email: email, username : user, age: age};
     res.json(body);
   } else {
     res.send("Error");

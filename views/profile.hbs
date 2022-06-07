@@ -31,6 +31,7 @@
         <div class="col-lg-6 mx-auto">
             <div id="username"></div>
             <div id="email"></div>
+            <div id="age"></div>
             <br>
             <div class="form-group">
                 <label for="password-update">Change Password</label>
@@ -46,6 +47,7 @@
         <div class="col-lg-6 mx-auto">
             <div id="username"></div>
             <div id="email"></div>
+            <div id="age"></div>
             <br>
         </div>
     </form>
@@ -76,7 +78,7 @@
        
             document.getElementById("username").innerHTML = "Username: " + userData.username;
             document.getElementById("email").innerHTML = "Email: " + userData.email;
-
+            document.getElementById("age").innerHTML = "Age: " + userData.age;
         } else {
             let data = {token: localStorage.getItem("token")};
             let userData = await fetch("/api/userData", {
@@ -86,6 +88,7 @@
                 }).then((res)=>res.json());
             document.getElementById("username").innerHTML = "Username: " + userData.username;
             document.getElementById("email").innerHTML = "Email: " + userData.email;
+            document.getElementById("age").innerHTML = "Age: " + userData.age;
         }
 
     }
