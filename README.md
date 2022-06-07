@@ -1,4 +1,4 @@
-# CS110 Project - Alternative
+# CS110 Project MonoGet - pivoted to Alternative Final Project
 
 ## Table of Contents
 - [Overview](#overview)
