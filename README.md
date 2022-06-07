@@ -26,5 +26,4 @@ In the project directory, you can run:
 >npm install\
 >nodemon server.js
 
-
-
+open http://localhost:8080
