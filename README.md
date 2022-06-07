@@ -17,7 +17,7 @@ The alternate project we choice is an extension of Lab 6. Lab 6 was a basic chat
 <a href="https://github.com/caKuma" target="_blank"><img src="https://avatars3.githubusercontent.com/u/19195878?s=400&v=4" align="left" height="30px">Yishao Wang </a>
 
 ## Usage
-Demo: <Link to youtube video>
+Demo: <b>This Video</b><Link to youtube video>
 
 <Screenshot of application>
 
