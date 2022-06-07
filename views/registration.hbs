@@ -34,6 +34,10 @@
         <label for="password-label">Password</label>
         <input class="form-control" type="password" id="password" placeholder="Enter a password" required/>
     </div>
+    <div class="form-group">
+        <label for="age">Age</label>
+        <input class="form-control" type="number" id="age" min="1" max="100" required/>
+    </div>
     <input class="btn btn-primary" type="submit" value="Submit"/>
     </div>
 </form>
@@ -47,6 +51,7 @@
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
         const email = document.getElementById("email").value;
+        const age = document.getElementById("age").value; 
         //console.log(username, password);
         const result = await fetch("/api/register", {
             method: "POST",
@@ -54,7 +59,7 @@
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username, password, email
+                username, password, email, age
             })
         }).then((res) => res.json());
 
