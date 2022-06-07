@@ -4,6 +4,7 @@
 - [Overview](#overview)
 - [Usage](#usage)
 - [How To Run](#how-to-run)
+- [Issues We Ran Into](#issues)
 
 
 ## Overview
@@ -27,3 +28,5 @@ In the project directory, you can run:
 >nodemon server.js
 
 open http://localhost:8080
+  
+## Issues We Ran Into
