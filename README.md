@@ -39,4 +39,4 @@ open http://localhost:8080
     It took a while for us to understand that we need to call json on the returned response object in order to parse the body of the json. After understanding the 
     problem we were able to successfully pass in 
   - Editing messages\
-    This problem was also challenging but we managed to resolve it by storing the message id in the name tag of the element to be accessed by our script function. 
+    This problem was also challenging but we managed to resolve it by storing the message id of the comment in the name tag of the element to be retrieved by our  script function. 
