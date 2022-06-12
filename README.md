@@ -33,7 +33,7 @@ open http://localhost:8080
 ## Issues We Ran Into
   - Routing profile for specific users\
     This was a challenging problem, but we managed to resolve this by adding a boolean called view that keeps track of which fetch we called to route to the profile 
-    page via the profile handler in server.js
+    page via the profile handler in server.js (this was the extra feature for our project)
   - Parsing and passing json objects\
     This took a while for us to understand because we had to manipulate json objects in some of our api calls and had to return it via the response as a json object.
     It took a while for us to understand that we need to call json on the returned response object in order to parse the body of the json. After understanding the 
